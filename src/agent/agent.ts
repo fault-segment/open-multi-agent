@@ -109,7 +109,7 @@ export class Agent {
     }
 
     const provider = this.config.provider ?? 'anthropic'
-    const adapter = await createAdapter(provider)
+    const adapter = await createAdapter(provider, this.config.apiKey, this.config.baseURL)
 
     const runnerOptions: RunnerOptions = {
       model: this.config.model,

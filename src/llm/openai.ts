@@ -69,9 +69,10 @@ export class OpenAIAdapter implements LLMAdapter {
 
   readonly #client: OpenAI
 
-  constructor(apiKey?: string) {
+  constructor(apiKey?: string, baseURL?: string) {
     this.#client = new OpenAI({
       apiKey: apiKey ?? process.env['OPENAI_API_KEY'],
+      baseURL,
     })
   }
 

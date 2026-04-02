@@ -187,6 +187,14 @@ export interface AgentConfig {
   readonly name: string
   readonly model: string
   readonly provider?: 'anthropic' | 'copilot' | 'openai'
+  /**
+   * Custom base URL for OpenAI-compatible APIs (Ollama, vLLM, LM Studio, etc.).
+   * Note: local servers that don't require auth still need `apiKey` set to a
+   * non-empty placeholder (e.g. `'ollama'`) because the OpenAI SDK validates it.
+   */
+  readonly baseURL?: string
+  /** API key override; falls back to the provider's standard env var. */
+  readonly apiKey?: string
   readonly systemPrompt?: string
   /** Names of tools (from the tool registry) available to this agent. */
   readonly tools?: readonly string[]
@@ -286,6 +294,8 @@ export interface OrchestratorConfig {
   readonly maxConcurrency?: number
   readonly defaultModel?: string
   readonly defaultProvider?: 'anthropic' | 'copilot' | 'openai'
+  readonly defaultBaseURL?: string
+  readonly defaultApiKey?: string
   onProgress?: (event: OrchestratorEvent) => void
 }
 

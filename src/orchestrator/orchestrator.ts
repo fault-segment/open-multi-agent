@@ -341,8 +341,8 @@ async function buildTaskPrompt(task: Task, team: Team): Promise<string> {
  */
 export class OpenMultiAgent {
   private readonly config: Required<
-    Omit<OrchestratorConfig, 'onProgress'>
-  > & Pick<OrchestratorConfig, 'onProgress'>
+    Omit<OrchestratorConfig, 'onProgress' | 'defaultBaseURL' | 'defaultApiKey'>
+  > & Pick<OrchestratorConfig, 'onProgress' | 'defaultBaseURL' | 'defaultApiKey'>
 
   private readonly teams: Map<string, Team> = new Map()
   private completedTaskCount = 0
@@ -360,6 +360,8 @@ export class OpenMultiAgent {
       maxConcurrency: config.maxConcurrency ?? DEFAULT_MAX_CONCURRENCY,
       defaultModel: config.defaultModel ?? DEFAULT_MODEL,
       defaultProvider: config.defaultProvider ?? 'anthropic',
+      defaultBaseURL: config.defaultBaseURL,
+      defaultApiKey: config.defaultApiKey,
       onProgress: config.onProgress,
     }
   }
@@ -405,7 +407,13 @@ export class OpenMultiAgent {
    * @param prompt - The user prompt to send.
    */
   async runAgent(config: AgentConfig, prompt: string): Promise<AgentRunResult> {
-    const agent = buildAgent(config)
+    const effective: AgentConfig = {
+      ...config,
+      provider: config.provider ?? this.config.defaultProvider,
+      baseURL: config.baseURL ?? this.config.defaultBaseURL,
+      apiKey: config.apiKey ?? this.config.defaultApiKey,
+    }
+    const agent = buildAgent(effective)
     this.config.onProgress?.({
       type: 'agent_start',
       agent: config.name,
@@ -462,6 +470,8 @@ export class OpenMultiAgent {
       name: 'coordinator',
       model: this.config.defaultModel,
       provider: this.config.defaultProvider,
+      baseURL: this.config.defaultBaseURL,
+      apiKey: this.config.defaultApiKey,
       systemPrompt: this.buildCoordinatorSystemPrompt(agentConfigs),
       maxTurns: 3,
     }
@@ -792,6 +802,8 @@ export class OpenMultiAgent {
         ...config,
         model: config.model,
         provider: config.provider ?? this.config.defaultProvider,
+        baseURL: config.baseURL ?? this.config.defaultBaseURL,
+        apiKey: config.apiKey ?? this.config.defaultApiKey,
       }
       pool.add(buildAgent(effective))
     }
