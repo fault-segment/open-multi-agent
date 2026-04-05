@@ -2,7 +2,7 @@
 
 TypeScript framework for multi-agent orchestration. One `runTeam()` call from goal to result — the framework decomposes it into tasks, resolves dependencies, and runs agents in parallel.
 
-3 runtime dependencies · 27 source files · Deploys anywhere Node.js runs · Mentioned in [Latent Space](https://www.latent.space/p/ainews-a-quiet-april-fools) AI News
+3 runtime dependencies · 33 source files · Deploys anywhere Node.js runs · Mentioned in [Latent Space](https://www.latent.space/p/ainews-a-quiet-april-fools) AI News
 
 [![GitHub stars](https://img.shields.io/github/stars/JackChen-me/open-multi-agent)](https://github.com/JackChen-me/open-multi-agent/stargazers)
 [![license](https://img.shields.io/github/license/JackChen-me/open-multi-agent)](./LICENSE)
@@ -14,11 +14,14 @@ TypeScript framework for multi-agent orchestration. One `runTeam()` call from go
 
 - **Goal In, Result Out** — `runTeam(team, "Build a REST API")`. A coordinator agent auto-decomposes the goal into a task DAG with dependencies and assignees, runs independent tasks in parallel, and synthesizes the final output. No manual task definitions or graph wiring required.
 - **TypeScript-Native** — Built for the Node.js ecosystem. `npm install`, import, run. No Python runtime, no subprocess bridge, no sidecar services. Embed in Express, Next.js, serverless functions, or CI/CD pipelines.
-- **Auditable and Lightweight** — 3 runtime dependencies (`@anthropic-ai/sdk`, `openai`, `zod`). 27 source files. The entire codebase is readable in an afternoon.
+- **Auditable and Lightweight** — 3 runtime dependencies (`@anthropic-ai/sdk`, `openai`, `zod`). 33 source files. The entire codebase is readable in an afternoon.
 - **Model Agnostic** — Claude, GPT, Gemma 4, and local models (Ollama, vLLM, LM Studio, llama.cpp server) in the same team. Swap models per agent via `baseURL`.
 - **Multi-Agent Collaboration** — Agents with different roles, tools, and models collaborate through a message bus and shared memory.
 - **Structured Output** — Add `outputSchema` (Zod) to any agent. Output is parsed as JSON, validated, and auto-retried once on failure. Access typed results via `result.structured`.
 - **Task Retry** — Set `maxRetries` on tasks for automatic retry with exponential backoff. Failed attempts accumulate token usage for accurate billing.
+- **Human-in-the-Loop** — Optional `onApproval` callback on `runTasks()`. After each batch of tasks completes, your callback decides whether to proceed or abort remaining work.
+- **Lifecycle Hooks** — `beforeRun` / `afterRun` on `AgentConfig`. Intercept the prompt before execution or post-process results after. Throw from either hook to abort.
+- **Loop Detection** — `loopDetection` on `AgentConfig` catches stuck agents repeating the same tool calls or text output. Configurable action: warn (default), terminate, or custom callback.
 - **Observability** — Optional `onTrace` callback emits structured spans for every LLM call, tool execution, task, and agent run — with timing, token usage, and a shared `runId` for correlation. Zero overhead when not subscribed, zero extra dependencies.
 
 ## Quick Start
@@ -128,6 +131,7 @@ npx tsx examples/01-single-agent.ts
 | [10 — Task Retry](examples/10-task-retry.ts) | `maxRetries` / `retryDelayMs` / `retryBackoff` with `task_retry` progress events |
 | [11 — Trace Observability](examples/11-trace-observability.ts) | `onTrace` callback — structured spans for LLM calls, tools, tasks, and agents |
 | [12 — Grok](examples/12-grok.ts) | Same as example 02 (`runTeam()` collaboration) with Grok (`XAI_API_KEY`) |
+| [13 — Gemini](examples/13-gemini.ts) | Gemini adapter smoke test with `gemini-2.5-flash` (`GEMINI_API_KEY`) |
 
 ## Architecture
 
@@ -162,6 +166,7 @@ npx tsx examples/01-single-agent.ts
 └────────┬──────────┘    │  - OpenAIAdapter     │
          │               │  - CopilotAdapter    │
          │               │  - GeminiAdapter     │
+         │               │  - GrokAdapter       │
          │               └──────────────────────┘
 ┌────────▼──────────┐
 │  AgentRunner      │    ┌──────────────────────┐
