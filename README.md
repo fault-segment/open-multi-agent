@@ -133,6 +133,7 @@ npx tsx examples/01-single-agent.ts
 | [11 — Trace Observability](examples/11-trace-observability.ts) | `onTrace` callback — structured spans for LLM calls, tools, tasks, and agents |
 | [12 — Grok](examples/12-grok.ts) | Same as example 02 (`runTeam()` collaboration) with Grok (`XAI_API_KEY`) |
 | [13 — Gemini](examples/13-gemini.ts) | Gemini adapter smoke test with `gemini-2.5-flash` (`GEMINI_API_KEY`) |
+| [16 — MCP GitHub Tools](examples/16-mcp-github.ts) | Connect MCP over stdio and use server tools as native `ToolDefinition`s |
 
 ## Architecture
 
@@ -234,6 +235,30 @@ const customAgent: AgentConfig = {
 ### Custom Tools
 
 Tools added via `agent.addTool()` are always available regardless of filtering.
+
+### MCP Tools (Model Context Protocol)
+
+`open-multi-agent` can connect to any MCP server and expose its tools directly to agents.
+
+```typescript
+import { connectMCPTools } from '@jackchen_me/open-multi-agent/mcp'
+
+const { tools, disconnect } = await connectMCPTools({
+  command: 'npx',
+  args: ['-y', '@modelcontextprotocol/server-github'],
+  env: { GITHUB_TOKEN: process.env.GITHUB_TOKEN },
+  namePrefix: 'github',
+})
+
+// Register each MCP tool in your ToolRegistry, then include their names in AgentConfig.tools
+// Don't forget cleanup when done
+await disconnect()
+```
+
+Notes:
+- `@modelcontextprotocol/sdk` is an optional peer dependency, only needed when using MCP.
+- Current transport support is stdio.
+- MCP input validation is delegated to the MCP server (`inputSchema` is `z.any()`).
 
 ## Supported Providers
 
