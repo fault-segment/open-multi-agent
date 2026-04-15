@@ -205,6 +205,30 @@ describe('OpenMultiAgent', () => {
       expect(toolNames).not.toContain('bash')
     })
 
+    it('customTools can be blocked by disallowedTools', async () => {
+      mockAdapterResponses = ['done']
+
+      const { z } = await import('zod')
+      const { defineTool } = await import('../src/tool/framework.js')
+
+      const myTool = defineTool({
+        name: 'my_custom_tool',
+        description: 'A custom tool for testing',
+        inputSchema: z.object({ query: z.string() }),
+        execute: async ({ query }) => ({ data: query }),
+      })
+
+      const oma = new OpenMultiAgent({ defaultModel: 'mock-model' })
+
+      await oma.runAgent(
+        { ...agentConfig('solo'), customTools: [myTool], disallowedTools: ['my_custom_tool'] },
+        'test',
+      )
+
+      const toolNames = capturedChatOptions[0]?.tools?.map(t => t.name) ?? []
+      expect(toolNames).not.toContain('my_custom_tool')
+    })
+
     it('fires onProgress events', async () => {
       mockAdapterResponses = ['done']
 
