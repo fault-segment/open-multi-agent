@@ -1,0 +1,37 @@
+SERVICE AGREEMENT
+
+1. PARTIES
+This Agreement is entered into on April 23, 2026, by and between:
+
+Client: [Client Name/Company Name]
+Service Provider: [Provider Name/Company Name]
+
+2. SCOPE OF SERVICES
+The Service Provider agrees to perform the following services for the Client:
+
+Project Name:  AI System Automation Integration
+
+Deliverables:
+- Technical consultation and architecture design;
+- Implementation of the scheduled automated workflows;
+- Delivery of final code and relevant technical documentation.
+
+3. FEES AND PAYMENT TERMS
+- Total Fee: The total project fee is $50,000 USD.
+- Payment Schedule:
+  1. Deposit: 50% of the total amount due within 3 business days of contract signing.
+  2. Final Payment: Remaining 50% due within 3 business days upon project acceptance.
+
+4. TIMELINE
+The Service Provider shall complete all agreed-upon work and submit it for acceptance by June 30, 2026. Extensions may be granted upon mutual written agreement in the event of force majeure.
+
+5. CONFIDENTIALITY
+Both parties agree to hold in strict confidence all trade secrets, technical data, and personal information disclosed during the collaboration. Neither party shall disclose such information to any third party without prior written consent.
+
+6. SIGNATURES
+This Agreement is executed in two counterparts, with each party receiving one, and shall be legally binding upon signing.
+
+-----------------------------------------------------------
+Client Signature: ____________________ Date: ___________
+
+Service Provider Signature: ____________ Date: ___________
