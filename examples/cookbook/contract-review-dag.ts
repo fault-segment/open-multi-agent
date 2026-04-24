@@ -228,7 +228,15 @@ function verifyParallelism(): void {
     console.log(`Task 2 (compliance-check) start: ${t2Start}`)
     console.log(`Task 3 (summary) start: ${t3Start}`)
     console.log(`Time difference: ${diff}ms`)
-    console.log(`Parallel execution (< 500ms): ${diff < 500 ? 'YES' : 'NO'}`)
+
+    if (diff >= 500) {
+      console.error(
+        `ASSERTION FAILED: Task 2 and Task 3 start times differ by ${diff}ms (>= 500ms). ` +
+          `Expected parallel execution after Task 1 completes.`,
+      )
+      process.exit(1)
+    }
+    console.log(`Parallel execution (< 500ms): YES`)
     console.log('========================\n')
   } else {
     console.log('\n=== Parallelism Check: Unable to verify (missing timing data) ===\n')
