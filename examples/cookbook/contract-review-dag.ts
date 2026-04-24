@@ -272,7 +272,7 @@ const taskConfigs: TaskConfig[] = [
   },
   {
     title: 'compliance-check',
-    description: 'Check each clause for regulatory and operational compliance. Read the clause list from shared memory.',
+    description: 'Check each clause for regulatory and operational compliance. Using the clause list from Task 1 above.',
     assignee: 'compliance-checker',
     dependsOn: ['extract-clauses'],
     maxRetries: 2,
@@ -281,7 +281,7 @@ const taskConfigs: TaskConfig[] = [
   },
   {
     title: 'summary',
-    description: 'Generate executive summary of the contract. Read the clause list from shared memory.',
+    description: 'Generate executive summary of the contract. Using the clause list from Task 1 above.',
     assignee: 'summarizer',
     dependsOn: ['extract-clauses'],
     maxRetries: 2,
@@ -314,9 +314,6 @@ async function main(): Promise<void> {
     console.log('[Orchestration] Starting DAG execution...\n')
 
     const result = await orchestrator.runTasks(team, taskConfigs)
-
-    // Wait a bit for timing data to be recorded
-    await new Promise((resolve) => setTimeout(resolve, 100))
 
     // Verify parallelism
     verifyParallelism()
