@@ -38,7 +38,7 @@ import type { LLMAdapter } from '../types.js'
  * Additional providers can be integrated by implementing {@link LLMAdapter}
  * directly and bypassing this factory.
  */
-export type SupportedProvider = 'anthropic' | 'azure-openai' | 'copilot' | 'deepseek' | 'grok' | 'minimax' | 'openai' | 'gemini'
+export type SupportedProvider = 'anthropic' | 'azure-openai' | 'copilot' | 'deepseek' | 'grok' | 'minimax' | 'openai' | 'gemini' | 'qiniu'
 
 /**
  * Instantiate the appropriate {@link LLMAdapter} for the given provider.
@@ -52,6 +52,7 @@ export type SupportedProvider = 'anthropic' | 'azure-openai' | 'copilot' | 'deep
  * - `grok`         → `XAI_API_KEY`
  * - `minimax`      → `MINIMAX_API_KEY`
  * - `deepseek`     → `DEEPSEEK_API_KEY`
+ * - `qiniu`        → `QINIU_API_KEY`
  * - `copilot`      → `GITHUB_COPILOT_TOKEN` / `GITHUB_TOKEN`, or interactive
  *                     OAuth2 device flow if neither is set
  *
@@ -99,6 +100,10 @@ export async function createAdapter(
     case 'deepseek': {
       const { DeepSeekAdapter } = await import('./deepseek.js')
       return new DeepSeekAdapter(apiKey, baseURL)
+    }
+    case 'qiniu': {
+      const { QiniuAdapter } = await import('./qiniu.js')
+      return new QiniuAdapter(apiKey, baseURL)
     }
     case 'azure-openai': {
       // For azure-openai, the `baseURL` parameter serves as the Azure endpoint URL.

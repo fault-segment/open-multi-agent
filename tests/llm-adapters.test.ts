@@ -39,6 +39,11 @@ describe('createAdapter', () => {
     expect(adapter.name).toBe('gemini')
   })
 
+  it('creates a qiniu adapter', async () => {
+    const adapter = await createAdapter('qiniu', 'test-key')
+    expect(adapter.name).toBe('qiniu')
+  })
+
   it('throws on unknown provider', async () => {
     await expect(
       createAdapter('unknown' as any, 'test-key'),

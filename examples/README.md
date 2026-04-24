@@ -44,6 +44,7 @@ Reusable shapes for common multi-agent problems.
 | [`patterns/task-retry`](patterns/task-retry.ts) | Per-task retry with exponential backoff. |
 | [`patterns/multi-perspective-code-review`](patterns/multi-perspective-code-review.ts) | Multiple reviewer agents in parallel, then synthesis. |
 | [`patterns/research-aggregation`](patterns/research-aggregation.ts) | Multi-source research collated by a synthesis agent. |
+| [`patterns/cost-tiered-pipeline`](patterns/cost-tiered-pipeline.ts) | Run the same four-stage pipeline twice to compare flagship vs tiered model cost. |
 | [`patterns/agent-handoff`](patterns/agent-handoff.ts) | Synchronous sub-agent delegation via `delegate_to_agent`. |
 
 ## cookbook — use-case recipes
@@ -54,6 +55,7 @@ End-to-end examples framed around a concrete problem (meeting summarization, tra
 |---------|----------------|
 | [`cookbook/meeting-summarizer`](cookbook/meeting-summarizer.ts) | Fan-out post-processing of a transcript into summary, structured action items, and sentiment. |
 | [`cookbook/contract-review-dag`](cookbook/contract-review-dag.ts) | 4-task DAG (extract → compliance-check + summary → notify) with step-level retry. Run normally or with `FORCE_FAIL=task2` to exercise retry. |
+| [`cookbook/competitive-monitoring`](cookbook/competitive-monitoring.ts) | Parallel source monitoring (Twitter/Reddit/News), contradiction detection, and aggregated intelligence reporting. |
 
 ## integrations — external systems
 
